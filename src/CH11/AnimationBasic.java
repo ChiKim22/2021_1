@@ -1,4 +1,4 @@
-package CH10;
+package CH11;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -34,7 +34,7 @@ public class AnimationBasic extends JPanel implements ActionListener{
 			System.exit(1);
 		}
 		
-		timer = new Timer(20, this);
+		timer = new Timer(10, this);
 		timer.start();
 		
 		x = Start_X;
@@ -58,7 +58,7 @@ public class AnimationBasic extends JPanel implements ActionListener{
 		/*
 		 *  이미지의 x, y 좌표 설정.
 		 */
-		
+	
 		x -= 1;
 		y -= 1;
 		

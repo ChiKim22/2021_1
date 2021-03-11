@@ -1,4 +1,4 @@
-package CH10;
+package CH11;
 
 import java.awt.event.*;
 import java.awt.geom.GeneralPath;
@@ -108,7 +108,7 @@ public class BazierCurve extends JFrame implements MouseListener, MouseMotionLis
 		repaint();
 		
 	}
-
+ 
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
