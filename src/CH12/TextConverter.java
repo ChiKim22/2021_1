@@ -92,8 +92,8 @@ public class TextConverter extends JFrame implements ActionListener {
 
 
 
-	        String clientId = "mkq9Q7mYK6tSUyCOVJJN";//애플리케이션 클라이언트 아이디값";
-	        String clientSecret = "ZlgiiUMZNu";//애플리케이션 클라이언트 시크릿값";
+	        String clientId = "ID";//애플리케이션 클라이언트 아이디값";
+	        String clientSecret = "PW";//애플리케이션 클라이언트 시크릿값";
 
 	        String apiURL = "https://openapi.naver.com/v1/papago/n2mt";
 	        String text;
