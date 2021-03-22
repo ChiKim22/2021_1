@@ -152,7 +152,7 @@ class Racquet{
 
 	public void draw(Graphics2D g) {
 		g.setColor(color);
-		g.fillOval(x, y, WIDTH, HEIGHT);
+		g.fillRect(x, y, WIDTH, HEIGHT);
 	}
 	public void keyRealeased(KeyEvent e) {
 		ySpeed = 0;
