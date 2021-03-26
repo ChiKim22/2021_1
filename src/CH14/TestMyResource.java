@@ -11,7 +11,7 @@ public class TestMyResource {
 		System.out.println(r.getValue());
 		System.out.println("Working!!!");
 		}catch(Exception e){
-		System.out.println(e.getMessage());
+//		System.out.println(e.getMessage());
 		}
 //		without autocloseable
 //		}finally {
