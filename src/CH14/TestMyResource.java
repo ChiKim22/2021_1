@@ -12,9 +12,11 @@ public class TestMyResource {
 		System.out.println("Working!!!");
 		}catch(Exception e){
 		System.out.println(e.getMessage());
-		}finally {
-		r.close();
 		}
+//		without autocloseable
+//		}finally {
+//		r.close();
+//		}
 
 	}
 
