@@ -2,10 +2,24 @@ package CH15;
 
 public class Student {
 
+	void setContent(Student content) {
+		this.content = content;
+	}
+	int getSid() {
+		return sid;
+	}
+	void setSid(int sid) {
+		this.sid = sid;
+	}
 	private Student content;
 	private String name, dept;
-	private int grade;
+	private int grade, sid;
 
+
+	public Student(String name, int sid) {
+		this.name = name;
+		this.sid = sid;
+	}
 	public Student getContent() {
 		return content;
 
