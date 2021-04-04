@@ -1,0 +1,110 @@
+SELECT * FROM Y_EMP;
+
+SELECT emp_id, emp_name, TO_CHAR(salary*12, 'L99,999.00') ANNUAL_SALARY
+FROM y_emp
+WHERE dept_id = 100;
+
+SELECT emp_id, emp_name, TO_CHAR(hiredate, 'yyyy-mm') hiredate
+FROM y_emp
+WHERE dept_id = 200;
+
+SELECT TO_CHAR(SYSDATE, 'YYYY/MM/DD HH:MI:SS AM')
+FROM dual;
+
+SELECT TO_CHAR(hiredate, 'fmyy/month/dd'),
+			TO_CHAR(hiredate, 'yy/month/dd')
+FROM y_emp;
+
+SELECT emp_id, emp_name, position, dept_id
+FROM y_emp
+WHERE salary*12 > TO_NUMBER('10,000', '99,999');
+
+SELECT emp_id, emp_name, birthdate
+FROM y_emp
+WHERE birthdate >= TO_DATE('01-01-1992', 'DD-MM-YYYY');
+
+
+SELECT emp_id, emp_name, birthdate
+FROM y_emp
+WHERE birthdate >= TO_DATE('01-01-92', 'DD-MM-RR');
+
+SELECT emp_id, REPLACE(emp_name, SUBSTR(emp_name,2,4), '**')name,
+						CONCAT(birthdate,CONCAT('[', CONCAT(gender,']'))) AS birth
+FROM y_emp
+WHERE SUBSTR(emp_name, -1.1) = '영';
+
+SELECT emp_id, emp_name, TO_CHAR(hiredate, 'YYYY-MM-DD'), //err
+TO_CHAR(NEXT_DAY(ADD_MONTHS(hiredate,6),'금요일')'YYYY-MM-DD')
+AS "Review_Day"
+FROM y_emp
+WHERE TO_CHAR(hiredate,'YYYY') LIKE '2011%';
+
+
+SELECT emp_name, salary, comm,
+(salary*12) + (salary*12*comm) ANN_SAL
+FROM y_emp;
+
+
+SELECT emp_name, salary, comm, //?
+(salary*12) + (salary*12*NVL(comm,0)) ANN_SAL
+FROM y_emp;
+
+SELECT emp_name, salary, comm,
+	(salary*12) + (salary*12*NVL(comm,0)) ANN_SAL,
+	NVL2(comm, 'SAL+COMM', 'SAL') BIGO
+FROM y_emp;
+
+SELECT emp_id, emp_name, NULLIF(LENGTH(emp_name), 3) RESULT
+FROM y_emp;
+
+SELECT emp_id, emp_name, COALESCE(comm, salary, 0)
+FROM y_emp;
+
+
+SELECT emp_name, position, salary,
+	DECODE(position, '사원', 1.05*salary,
+					 '대리', 1.07*salary,
+					 salary) AS INCREASED_SALARY
+FROM y_emp;
+
+SELECT emp_name, position, salary,
+	CASE position WHEN '사원' THEN 1.05*salary
+				  WHEN '대리' THEN 1.07*salary
+				  WHEN '과장' THEN 1.10*salary
+				  ELSE salary END AS INCREASED_SALARY
+FROM y_emp;
+
+SELECT emp_id, emp_name, salary,
+	CASE WHEN salary < 300 THEN 'C'
+		 WHEN salary >= 300 AND salary < 600 THEN 'B'
+		 ELSE 'A'
+		 END AS SELARY_LEVEL
+FROM y_emp;
+
+SELECT SUM(salary), AVG(salary), MAX(salary), MIN(salary)
+FROM y_emp;
+
+SELECT MIN(hiredate), MAX(hiredate)
+FROM y_emp;
+
+SELECT COUNT(*),COUNT(dept_id),COUNT(DISTINCT dept_id)
+FROM y_emp;
+
+SELECT AVG(NVL(comm,0))
+FROM y_emp;
+
+SELECT SUM(salary), AVG(salary), MAX(salary), MIN(salary)
+FROM y_emp
+WHERE dept_id = 400;
+
+SELECT dept_id, SUM(salary), AVG(salary)
+FROM y_emp
+GROUP BY dept_id;
+
+SELECT dept_id, position, SUM(salary)
+FROM y_emp
+GROUP BY dept_id, position;
+
+
+
+
