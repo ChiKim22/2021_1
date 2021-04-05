@@ -20,6 +20,9 @@ public class Student {
 		this.name = name;
 		this.sid = sid;
 	}
+	public Student() {
+		// TODO Auto-generated constructor stub
+	}
 	public Student getContent() {
 		return content;
 
