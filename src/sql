@@ -106,3 +106,6 @@ SELECT emp_id, hiredate,
 ROUND(hiredate, 'MONTH'), TRUNC(hiredate, 'MONTH')
 FROM y_emp
 WHERE hiredate LIKE '05%';
+
+
+--SQL TEST1
