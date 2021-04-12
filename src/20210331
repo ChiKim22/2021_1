@@ -106,5 +106,85 @@ FROM y_emp
 GROUP BY dept_id, position;
 
 
+--0407
+
+
+SELECT dept_id, MAX(salary), MIN(salary)
+FROM y_emp
+GROUP BY dept_id
+HAVING AVG(salary) > 600;
+
+SELECT position, SUM(salary)
+FROM y_emp
+WHERE position NOT LIKE '%장%'
+GROUP BY position
+HAVING SUM(salary) > 2000
+ORDER BY 2;
+
+SELECT MAX(COUNT(*)), MIN(COUNT(*))
+FROM y_emp
+GROUP BY dept_id;
+
+SELECT dept_id, position, SUM(salary)
+FROM y_emp
+WHERE dept_id > 200
+GROUP BY CUBE (dept_id, position); --ROLLUP, CUBE
+
+SELECT dept_id, position, SUM(salary),
+		GROUPING(dept_id) grp_dept ,
+		GROUPING(position) grp_posit
+FROM y_emp
+GROUP BY CUBE (dept_id, position);
+
+SELECT dept_id, position, gender, COUNT(*)
+FROM y_emp
+GROUP BY GROUPING SETS ((dept_id, position), (position, gender), ());
+
+
+--조합열
+SELECT dept_id, gender, position, SUM(salary)
+FROM y_emp
+GROUP BY ROLLUP(dept_id, (gender, position));
+
+--JOIN
+SELECT emp_name, dept_name
+FROM y_emp CROSS JOIN y_dept;
+
+SELECT emp_id, emp_name, dept_id, dept_name
+FROM y_emp NATURAL JOIN y_dept;
+
+SELECT e.emp_id, e.emp_name, e.dept_id, d.dept_name
+FROM y_emp e, y_dept d
+WHERE e.dept_id=d.dept_id
+AND e.mgr_id=d.mgr_id;
+
+SELECT dept_id, dept_name, city
+FROM y_dept NATURAL JOIN y_loc
+WHERE dept_id IN (100, 200);
+
+SELECT emp_id, emp_name, dept_id, dept_name
+FROM y_emp JOIN y_dept
+USING (dept_id);
+
+SELECT emp_id, emp_name, y_emp.mgr_id, dept_id, dept_name
+FROM y_emp JOIN y_dept
+USING (dept_id);
+
+SELECT y_emp.emp_name, y_emp.mgr_id, dept_id, y_dept.dept_name
+FROM y_emp JOIN y_dept
+USING (dept_id);
+
+SELECT e.emp_id, e.emp_name, dept_id, d.dept_name
+FROM y_emp e JOIN y_dept d
+USING (dept_id);
+
+SELECT d.dept_id, d.dept_name, d.loc_id, l.city
+FROM y_dept d JOIN y_loc l
+ON (d.loc_id = l.loc_id);
+
+SELECT e.emp_id, e.emp_name, e.mgr_id, m.emp_name
+FROM y_emp e JOIN y_emp m
+ON (e.mgr_id = m.emp_id);
+
 
 
