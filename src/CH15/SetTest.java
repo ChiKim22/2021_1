@@ -79,7 +79,7 @@ public class SetTest{
 
 	}
 
-	private static void test2() {
+	public static void test2() {
 		/*
 		 * set1 = {2, 3, 4, 5, 6, 8, 9, 10}
 		 * set2 = {1, 3, 5, 7, 9}
