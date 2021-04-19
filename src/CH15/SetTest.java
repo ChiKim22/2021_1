@@ -92,6 +92,7 @@ public class SetTest{
 
 		//Generic 클래스 객체를 생성할 때 타입 파라미터는
 		//프리미티브 타입을 줄 수 없다. 객체타입만 가능하다. <int> => X , <Integer> => O
+		//String 는 객체이다.
 
 		// HashSet, LinkedHashSet, TreeSet
 		//LinkedhashSet 은 입력 순서대로 인출
