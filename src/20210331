@@ -186,5 +186,125 @@ SELECT e.emp_id, e.emp_name, e.mgr_id, m.emp_name
 FROM y_emp e JOIN y_emp m
 ON (e.mgr_id = m.emp_id);
 
+--0414
+
+SELECT d.dept_id, d.dept_name, d.loc_id, l.city
+FROM y_dept d JOIN y_loc l
+ON d.loc_id = l.loc_id;
+
+SELECT e.emp_id, e.emp_name, e.dept_id, d.dept_name
+FROM y_emp e JOIN y_dept d
+ON e.dept_id = d.dept_id
+WHERE e.salary > 650;
+
+SELECT e.emp_name, l.city, d.dept_name
+FROM y_emp e
+JOIN y_dept d
+ON d.dept_id = e.dept_id
+JOIN y_loc l
+ON d.loc_id = l.loc_id;
+
+
+SELECT e.emp_id, e.emp_name, e.salary, p.pay_level
+FROM y_emp e JOIN pay_grade P
+ON e.salary BETWEEN p.low_pay AND p.high_pay;
+
+SELECT e.emp_id, e.emp_name, e.mgr_id, m.emp_name
+FROM y_emp e JOIN y_emp m
+ON e.mgr_id = m.emp_id;
+
+SELECT d.dept_id, d.dept_name, l.city
+FROM y_dept d JOIN y_loc l
+ON d.loc_id = l.loc_id;
+
+SELECT e.emp_name, e.dept_id, d.dept_name
+FROM y_emp e FULL OUTER JOIN y_dept d
+ON e.dept_id = d.dept_id;
+
+SELECT y_emp.emp_id, y_emp.emp_name,
+		y_emp.dept_id, y_dept.loc_id
+FROM y_emp, Y_dept
+WHERE y_emp.dept_id = y_dept.dept_id
+AND y_emp.dept_id BETWEEN 100 AND 300;
+
+SELECT e.emp_id, e.emp_name, e.salary, p.pay_level
+FROM y_emp e, pay_grade p
+WHERE e.salary BETWEEN p.low_pay AND p.high_pay;
+
+SELECT e.emp_id, e.emp_name, e.mgr_id, m.emp_name
+FROM y_emp e, y_emp m
+WHERE e.mgr_id = m.emp_id;
+
+SELECT e.emp_id, e.emp_name, e.dept_id, d.dept_name
+FROM y_emp e, y_dept d
+WHERE e.dept_id = d.dept_id(+);
+
+SELECT e.emp_id, e.emp_name, e.dept_id, d.dept_name
+FROM y_emp e, y_dept d
+WHERE e.dept_id(+) = d.dept_id;
+
+SELECT e.emp_id, e.emp_name, e.dept_id, d.dept_name
+FROM y_emp e, y_dept d
+WHERE e.dept_id(+) = d.dept_id
+UNION
+SELECT e.emp_id, e.emp_name, e.dept_id, d.dept_name
+FROM y_emp e, y_dept d
+WHERE e.dept_id = d.dept_id(+);
+
+SELECT emp_name, position
+FROM y_emp
+WHERE position =
+				(SELECT position
+				 FROM y_emp
+				 WHERE emp_id = 1049);
+
+
+SELECT emp_name, position, salary
+FROM y_emp
+WHERE position =
+				(SELECT position FROM y_emp
+				 WHERE emp_id = 1044)
+AND salary >
+				(SELECT salary FROM y_emp
+				 WHERE emp_id = 1050);
+
+
+SELECT emp_id, emp_name, position, salary
+FROM y_emp
+WHERE salary = (SELECT MIN(salary) FROM y_emp);
+
+SELECT position, AVG(salary)
+FROM y_emp
+GROUP BY position
+HAVING AVG(salary) = (SELECT MIN(AVG(salary)) FROM y_emp
+					  GROUP BY position);
+
+
+SELECT emp_name, salary, dept_id
+FROM y_emp
+WHERE salary IN (SELECT MAX(salary)
+     			 FROM y_emp
+     			 WHERE dept_id <= 200
+     			 GROUP BY dept_id);
+
+SELECT emp_id, emp_name, salary, position
+FROM y_emp
+WHERE salary > ANY (SELECT salary FROM y_emp
+					WHERE position = '대리')
+AND position <> '대리';
+
+
+SELECT emp.emp_name
+FROM y_emp emp
+WHERE emp.emp_id IN (SELECT mgr.mgr_id FROM y_emp mgr);
+
+SELECT emp.emp_name
+FROM y_emp emp
+WHERE emp.emp_id NOT IN (SELECT mgr.mgr_id
+						 FROM y_emp mgr
+						 WHERE mgr_id IS NOT NULL);
+
+
+
 
 
