@@ -5,7 +5,7 @@ import java.util.*;
 public class CollectionsAPITest2 {
 
 	public static void main(String[] args) {
-		//		sguffleTest();
+		//		suffleTest();
 
 		// 이진탐색은 정렬된 리스트에서
 		// 내가 원하는 값을 찾아주는 방법.
@@ -16,17 +16,17 @@ public class CollectionsAPITest2 {
 		// 1. 무작위 정수를 저장한 리스트에 대해 이진탐색 <= 잘못된 결과가 나오는 경우.
 		// 2. 정렬된 리스트에 대해 이진탐색 <= 이렇게 사용해야 함.
 		Random random = new Random();
-		Set<Integer> list = new LinkedHashSet<>();
+		List<Integer> list = new ArrayList<>();
 
 		for(int i = 0; i < 20; i++) {
 			list.add(random.nextInt(100) + 1);
 
 		}
 
-		Iterator iter = Collections.sort(list);
+//		Iterator iter = Collections.sort(list);
 		System.out.println(list);
 
-		int idx = Collections.iteratorBinarySearch(list, 33); // 마이너스값이 없다.
+		int idx = Collections.binarySearch(list, 33); // 마이너스값이 없다.
 
 		if(idx >=0 ) {
 			System.out.println((idx + 1) + " 번째에 있습니다.");
@@ -36,7 +36,7 @@ public class CollectionsAPITest2 {
 		}
 	}
 
-	private static void sguffleTest() {
+	private static void suffleTest() {
 		List<Integer> list = new ArrayList<>();
 
 		for(int i = 0; i < 10; i++) {
