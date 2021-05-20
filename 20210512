@@ -83,7 +83,7 @@ FROM y_emp
 WHERE 1 = 2;
 SELECT * FROM test300_1; -- 구조만 가져오고 자료는 가져오지 않음
 
-
+--
 
 
 
