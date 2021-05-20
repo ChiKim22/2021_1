@@ -1,0 +1,92 @@
+-- Top Down Tree
+
+SELECT emp_id, emp_name, position, mgr_id, level
+FROM y_emp
+START WITH emp_id = 1001
+CONNECT BY PRIOR emp_id = mgr_id;
+
+SELECT emp_id, emp_name, position, mgr_id
+FROM y_emp
+START WITH emp_id = 1019
+CONNECT BY PRIOR emp_id = mgr_id;
+
+SELECT emp_id, emp_name, SYS_CONNECT_BY_PATH(emp_id, '/' )path
+FROM y_emp
+START WITH emp_id = 1001
+CONNECT BY PRIOR emp_id = mgr_id;
+
+SELECT emp_id, emp_name, mgr_id, level
+FROM y_emp
+START WITH emp_id = 1035
+CONNECT BY PRIOR emp_id = mgr_id;
+
+SELECT LPAD(emp_id, LENGTH(emp_id)+(LEVEL*2)-2, '-') AS CHART
+FROM y_emp
+START WITH emp_id = 1001
+CONNECT BY PRIOR emp_id = mgr_id;
+
+SELECT LPAD(emp_id, LENGTH(emp_id)+(LEVEL*2)-2, '-') AS CHART
+FROM y_emp
+START WITH emp_id = 1001
+CONNECT BY PRIOR emp_id = mgr_id
+AND emp_id <> 1002;
+
+INSERT INTO y_dept(dept_id, dept_name, mgr_id, loc_id)
+VALUES (600, '생산관리', 1038, 6);
+
+INSERT INTO y_dept
+VALUES (600, '생산관리', 1038, 6);
+
+INSERT INTO y_dept(dept_id, dept_name)
+VALUES(700, '회계부');
+
+INSERT INTO y_dept
+VALUES(800, '시스템관리', NULL, NULL);
+
+SELECT * FROM y_dept;
+
+INSERT INTO y_emp(emp_id, emp_name, hiredate, dept_id)
+VALUES(2007, '박민영', SYSDATE, 700);
+
+SELECT emp_id, emp_name, hiredate, dept_id
+FROM y_emp
+WHERE emp_id = 2007;
+
+
+INSERT INTO y_emp(emp_id, emp_name, hiredate)
+VALUES (2008, '윤현민', TO_DATE('99/02/03', 'YY/MM/DD'));
+
+INSERT INTO y_emp(emp_id, emp_name, hiredate)
+VALUES (2009, 'Jason Lee', TO_DATE('99/02/03', 'RR/MM/DD'));
+
+SELECT emp_id, emp_name, TO_CHAR(hiredate, 'yyyy/mm/dd')
+FROM y_emp
+WHERE emp_id IN (2008, 2009);
+
+SELECT COUNT(*) FROM emp300; --0
+
+SELECT emp_id, emp_name, salary, dept_id
+FROM y_emp
+WHERE dept_id = 300;
+
+CREATE TABLE test300
+AS
+SELECT emp_id, emp_name, salary, dept_id
+FROM y_emp
+WHERE dept_id = 300;  --CTAS : 테이블을 만들고 서브쿼리를 복제
+SELECT * FROM test300;
+
+CREATE TABLE test300_1
+AS
+SELECT emp_id, emp_name, salary, dept_id -- 구조
+FROM y_emp
+WHERE 1 = 2;
+SELECT * FROM test300_1; -- 구조만 가져오고 자료는 가져오지 않음
+
+
+
+
+
+
+
+
