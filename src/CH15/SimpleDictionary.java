@@ -1,7 +1,6 @@
 package CH15;
 
 import javax.swing.*;
-
 import java.awt.Dimension;
 import java.awt.event.*;
 import java.io.FileNotFoundException;
@@ -9,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.sql.*;
 
 
 public class SimpleDictionary extends JPanel implements ActionListener{
@@ -28,6 +28,14 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 	Map<String, String> dict = new HashMap<>();
 	private static final String DIC_FILE_NAME = "dict.props";
 
+
+	// DB
+	private String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
+	private String URL = "jdbc:oracle:thin:@127.0.0.1:1521:xe";
+	private String USER = "system";
+	private String PWD = "oracle";
+
+
 	public SimpleDictionary() {
 		//Panel 의 기본 레이아웃 : FlowLayout
 		this.add(inputField);
@@ -41,18 +49,23 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 		this.setSize(new Dimension(600, 50));
 
 		//파일에 key = value 형태로 저장된 엔트리들을 읽어서, dict를 구성.
-		buildDictionaryFromFile();
+		//		buildDictionaryFromFile();
+
+		//데이터 베이스를 활용.
+		buildDictionaryFromDB();
 	}
 
+	//File
 	private void buildDictionaryFromFile() {
 		// Properities 도 일종의 Map 이며,
 		// Key, Value 쌍의 타입이 각각 String, String로 고정된 일종의 Map이다.
 		Properties props = new Properties();
-//		props.put("사과", "Apple");
-//		System.out.println(props.get("사과"));
+		//		props.put("사과", "Apple");
+		//		System.out.println(props.get("사과"));
 
 		// 파일에서 이릭어서 props 객체의 <key, value> 쌍을 구성할 수 있다.
-//		FileReader fReader = null;
+		//		FileReader fReader = null;
+
 		try (FileReader fReader = new FileReader(DIC_FILE_NAME)){
 			props.load(fReader);
 		} catch (Exception e) {
@@ -63,6 +76,125 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 			dict.put((String)obj, (String)props.get(obj));
 		}
 	}
+
+	private void addWordToFile(String key, String value) {
+
+		try(FileWriter fWriter =
+				new FileWriter(DIC_FILE_NAME, true)){
+			fWriter.write(key+"="+value+"\n"); // 덮어씀.
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+	}
+
+
+	// DB
+	private void buildDictionaryFromDB() {
+		/*
+		 * Database sever 에 연결한다.
+		 * JDBC 드라이버를 메모리에 로딩(적재)
+		 * DriverManager(java.sql 패키지에 정의된 클래스)
+		 * Connection con = DriverManager.getConnection();
+		 * 메서드를 호출해 연결을 establish
+		 * 이 떄 연결 정보를 getConnection() 메서드에 연결해줘야 함.
+		 * 연결정보 : DB server 의 URL, =>(ip address, port num, DB_Name, db 사용자의 id, pw);
+		 * connection 객체를 통해서 SQL 문 실행을 요청학, 그 결과를 받아 처리한다.
+		 * 1. con.createStatement() 메서드 호출한 후 반환되는 Statment 객체를 이용 (Static SQL)
+		 * 정적 SQL문 : 프로그래밍 시점에 실행할 SQL 문 결정되고 고정된 경우. SELECT * FROM dict;
+		 * 2. con.prepareStatement() 메서드 호출한 후 반환되는 PreparedStatement 객체를 이용. (Dynamic SQL) // 이번에 사용
+		 * 동적 SQL문 : 프로그래밍 시점에 실행할 SQL 문 결정되지 않고 변경되는 경우. SELECT * FROM dict WHERE kWord = ?
+		 * String sql = "SELECT * FROM dict";
+		 * PreparedStatement pstmt = con.prepareStatement(sql);
+		 * 실행 준비가 된 PreparedStatement를 실행시키는 방법 2가지
+		 * 1. 실행할 SQL 문이 insert, delete, update 의 경우 = pstmt.executeUpdate();
+		 * 2. 실행할 SQL 문이 select 문일 경우. = pstmt.executeQuery();
+		 */
+
+//		String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
+//		String URL = "jdbc:oracle:thin:@127.0.0.1:1521:xe";
+//		String USER = "system";
+//		String PWD = "oracle";
+
+		//	Connection con = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		//DB
+		// JDBC 드라이버를 메모리에 적재
+		// 드라이버 클래스 이름은 DBMS 마다 다르다.
+		try {
+			Class.forName(JDBC_DRIVER); // Load Driver
+			System.out.println("Connect Success");
+		} catch (ClassNotFoundException e) {
+			System.out.println("Fail to Connect");
+			return; // 없으면 한번만 동작한 뒤 멈춤.
+		}
+
+		try (Connection con = DriverManager.getConnection(URL, USER, PWD);){ // finally 호출 필요없음.
+
+			//Connect DB
+			//		con = DriverManager.getConnection(URL, USER, PWD);
+
+			//Run SELECT
+			String sql = "SELECT * FROM dict";
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery(); // 셀렉트문의 결과 레코드들이 이 객체안에 들어있다.
+			while(rs.next()) {
+				// 현재 포인터가 가리키는 컬럼 값을 빼오면 됨.
+				// 각 컬럼의 타입에 따라서 호출할 메소드가 달라진다.
+				// ex) char, varchar 타입의 컬럼은 getString('컬럼이름'또는 '컬럼위치');
+				// int 타입은 getInt();
+				// DateTime, Date 타입은 getDate();
+
+				String kWord = rs.getString("kWord");
+				//rs.getString(1);
+				String eWord = rs.getString("eWord");
+				//rs.getString(2);
+
+				dict.put(kWord, eWord);
+			}
+
+		}catch(Exception ex) {
+			System.out.println("Load fail" + ex);
+		}
+		//	finally {
+		//		try {con.close();} catch(Exception ignore) {}
+		//	}
+	}
+
+	private void addToDB(String key, String value) {
+		/*
+		 * 1.
+		 * 드라이버 클래스는 딱 한번만 메모리에 적재하면 됨.
+		 * 객체가 이미 생성되어 있으면 생성자에 적재되므로 여기서 적재할 필요가 없다.
+		 *
+		 * 2.
+		 * DB 연결
+		 * 3.
+		 * SQL문 실행
+		 * 4.
+		 * DB 연결해제
+		 */
+
+		try (Connection conn = DriverManager.getConnection(URL, USER, PWD)){
+			String sql = "INSERT INTO dict VALUES(?, ?)"; // (kWord, eWord) 도 가능 ? 에 데이터를 채워주어야 함.
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+
+			// ? 자리에 값을 채운 후, 서버에게 실행준비된 SQL 문을 실행하게끔 요청.
+
+			pstmt.setString(1, key); // 각 자릿수의 인자에 해당하는 값을 지정.
+			pstmt.setString(2, value);
+
+			pstmt.executeUpdate(); // 실행 요청.
+
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace(); // 디버깅시 에러의 상세내용 표시.
+
+		}
+
+	}
+
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -99,25 +231,17 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 			 * dict.put (입력필드에 입력된 단어, inputDialog에 입력된 단어);
 			 */
 			String value = JOptionPane.showInputDialog(this,
-				"입력한 "+ key + " 에 대응되는 영어단어를 입력하세요.");
+					"입력한 "+ key + " 에 대응되는 영어단어를 입력하세요.");
 			if(value.trim().length() == 0) return;
 			dict.put(key, value);
-			addWordToFile(key, value);
+			dict.put(value, key);
+
+			addToDB(key, value);
+//			addWordToFile(key, value);
 			JOptionPane.showMessageDialog(this, value + " 영어단어가 추가되었습니다.",
 					key, JOptionPane.INFORMATION_MESSAGE);
 		}
-//		inputField.setText("");
-
-	}
-
-	private void addWordToFile(String key, String value) {
-
-		try(FileWriter fWriter =
-				new FileWriter(DIC_FILE_NAME, true)){
-			fWriter.write(key+"="+value+"\n"); // 덮어씀.
-		}catch(Exception e) {
-			System.out.println(e.getMessage());
-			}
+		inputField.setText("");
 
 	}
 
@@ -125,7 +249,6 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 		JFrame frame = new JFrame();
 		SimpleDictionary dictPanel = new SimpleDictionary();
 		frame.add(dictPanel);
-
 		frame.setTitle("Simple Dictionary");
 		frame.pack();
 		frame.setResizable(false);
