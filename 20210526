@@ -1,0 +1,147 @@
+INSERT ALL
+INTO sal_list VALUES(emp_id, salary, position)
+INTO mgr_list VALUES(emp_id, mgr_id, hiredate)
+SELECT emp_id, hiredate, salary, mgr_id
+FROM y_emp
+WHERE emp_id > 2000;
+
+
+INSERT FIRST
+WHEN SAL > 5000 THEN
+INTO high_income VALUES (DEPTID, SAL)
+WHEN HIREDATE like ('17%') THEN
+INTO hired_list18 VALUES(DEPTID, HIREDATE)
+ELSE
+INTO hired_list VALUES(DEPTID, HIREDATE)
+SELECT dept_id DEPTID, SUM(salary) SAL, MAX(hiredate) HIREDATE
+FROM y_emp
+GROUP BY dept_id;
+
+
+SELECT * FROM sales_data
+
+
+INSERT ALL
+INTO sales_report VALUES (emp_id, week_id, mon_sales)
+INTO sales_report VALUES (emp_id, week_id, tue_sales)
+INTO sales_report VALUES (emp_id, week_id, wed_sales)kkㅏdfsdf
+INTO sales_report VALUES (emp_id, week_id, thur_sales)
+INTO sales_report VALUES (emp_id, week_id, fri_sales)
+SELECT emp_id, week_id, mon_sales, tue_sales, wed_sales, thur_sales, fri_sales
+FROM sales_data;
+
+
+
+UPDATE emp300
+SET salary = (SELECT salary FROM Y_EMP
+				WHERE emp_id = 1038),
+			dept_id = (SELECT dept_id FROM y_emp
+								WHERE emp_id = 1038)
+
+WHERE emp_id = 1087;
+
+SELECT * FROM emp300;
+
+
+DELECT FROM emp300;
+
+DELECT FROMM y_emp
+WHERE dept_id = (SELECT dept_id
+					FROM y_dept
+					WHERE dept_name LIKE '%회계%');
+
+
+
+SELECT * FROM old_emp;
+
+
+SELECT emp_id, emp_name, dept_id FROM y_emp
+
+UPDATE y_emp SET dept_id = null
+WHERE emp_id in (1029, 1067);
+
+SELECT emp_id, emp_name, dept_id FROM y_emp
+WHERE emp_id in (1029, 1067);
+
+MERGE INTO old_emp o
+	USING y_emp e
+	ON (o.emp_id = e.emp_id)
+	WHEN MATCHED THEN
+	UPDATE SET
+		o.emp_name = e.emp_name,
+		o.position = e.position,
+		o.salary = e.salary,
+		o.dept_id = e.dept_id
+	DELETE WHERE (e.dept__id is null)
+	WHEN NOT MATCHED THEN
+	INSERT VALUES(e.emp_id, e.emp_name, e.position, e.salary, e.dept_id);
+
+
+
+	-- transection
+
+	create table test (id number, sal number)
+
+	INSERT INTO test VALUES(10, 1000);
+	INSERT INTO test VALUES(20, 2000);
+	INSERT INTO test VALUES(30, 3000);
+
+
+	UPDATE test SET sal = 7000 where id = 20;
+
+	update test SET sal = 8000 where id = 20;
+
+	update test SET sal = 9999 where id = 30;
+	commit
+
+	SELECT * FROM test;
+
+	lock table test in exclusive mode;
+
+	commit
+
+
+	rollback
+
+
+	drop table test purge;
+
+	create table test (id number primary key,
+				name varchar2(20) constraint test_name_nn not null);
+
+
+	select table_name, constraint_name, status
+	from user_constraints
+	WHERE table_name = 'TEST';
+
+	-- COLUMN LEVEL
+
+	CREATE TABLE location
+	(lo_id number(3),
+	state varchar2(20) constraint location_state_nn not null,
+	account number(7),
+	constraint location_lo_id_pk primary key(lo_id),
+	constraint location_account_uk unique(account));
+
+	CREATE table dept
+	(deptno number(4),
+	dname varchar2(20) constraint dept_dname_nn not null,
+	time numer(3),
+	lo_id number(3),
+	constraint dept_deptno_pk_primary key(deptno),
+	constraint dept_time_ck check (time between 50 and 70),
+	constraint dept_lo_id_fk foreign key(lo_id) references location(lo_id));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
