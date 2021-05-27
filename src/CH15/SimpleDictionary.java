@@ -137,8 +137,10 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 
 			//Run SELECT
 			String sql = "SELECT * FROM dict";
+
 			PreparedStatement pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery(); // 셀렉트문의 결과 레코드들이 이 객체안에 들어있다.
+
 			while(rs.next()) {
 				// 현재 포인터가 가리키는 컬럼 값을 빼오면 됨.
 				// 각 컬럼의 타입에 따라서 호출할 메소드가 달라진다.
@@ -152,6 +154,7 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 				//rs.getString(2);
 
 				dict.put(kWord, eWord);
+				dict.put(eWord, kWord);
 			}
 
 		}catch(Exception ex) {
@@ -167,9 +170,13 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 		 * 1.
 		 * 드라이버 클래스는 딱 한번만 메모리에 적재하면 됨.
 		 * 객체가 이미 생성되어 있으면 생성자에 적재되므로 여기서 적재할 필요가 없다.
-		 *
 		 * 2.
 		 * DB 연결
+		 * Connection 객체에게 실행할 SQL 문을 실행준비 요청하고 con.prepareStatement(sql);
+		 * PreparedStatement 객체가 반환됨.
+		 * preparedStatement 객체에게 서버에게 실행 요청.
+		 * preparedStatement.executeUpdate(); => 실행할 SQL 문이 INSERT, DELETE, UPDATE 일때.
+		 * preparedStatement.executeQuery(); => 실행할 SQL문이 SELECT 문일때.
 		 * 3.
 		 * SQL문 실행
 		 * 4.
@@ -178,13 +185,18 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 
 		try (Connection conn = DriverManager.getConnection(URL, USER, PWD)){
 			String sql = "INSERT INTO dict VALUES(?, ?)"; // (kWord, eWord) 도 가능 ? 에 데이터를 채워주어야 함.
+			// ? 는 place holder이고, 실행준비 시킨후에 실행직전에 값을 설정하고, 실행요청을 보냄.
+			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
 			// ? 자리에 값을 채운 후, 서버에게 실행준비된 SQL 문을 실행하게끔 요청.
+			// ? 자리에 들어갈 컬럼값의 데이터 타입에 따라 적절한 setXXX 메소드를 호출해야함.
+			
 
 			pstmt.setString(1, key); // 각 자릿수의 인자에 해당하는 값을 지정.
 			pstmt.setString(2, value);
-
+			
+			
 			pstmt.executeUpdate(); // 실행 요청.
 
 		}catch(Exception e) {
