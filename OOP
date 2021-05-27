@@ -1,0 +1,45 @@
+--USE Oracle_2;
+CREATE TABLE dict (
+ 	kWord VARCHAR(45),
+ 	eWord VARCHAR(45)
+);
+
+INSERT INTO dict VALUES('사과', 'Apple');
+
+
+SELECT * FROM dict;
+
+CREATE TABLE dbview(
+	ID INTEGER(11),
+	Title VARCHAR(45),
+	Publisher VARCHAR(45),
+	Year DATE(),
+	Price INTEGER(11)
+)
+
+-- TableViewer
+
+CREATE TABLE books (
+	book_id int PRIMARY KEY,
+	title varchar2(50),
+	publisher varchar2(30),
+	year date,
+	price int
+);
+
+CREATE SEQUENCE books_seq START WITH 1 INCREMENT BY 1 MAXVALUE 100 CYCLE NOCACHE; -- MYSQL == AUTO INCRESED
+
+INSERT INTO books(book_id, title, publisher, year, price) VALUES (books_seq.NEXTVAL, '어서와 자바는 처음이지', 'Infinity Books', '2016-8-15', 33000)
+INSERT INTO books(book_id, title, publisher, YEAR, price) VALUES (books_seq.NEXTVAL, '데이터베이스 배움터', '생능출판사', '2004-3-5', 26000)
+INSERT INTO books(book_id, title, publisher, year, price) VALUES (books_seq.NEXTVAL, '파이썬 프로그래밍', '연두 에디션', '2020-2-10', 23000)
+INSERT INTO books(book_id, title, publisher, year, price) VALUES (books_seq.NEXTVAL, 'JLPT 급소공략 N2 문법', '다락원', '2020-12-2', 13000);
+
+
+--UPDATE FROM books VALUES(books_seq.book_id);
+
+
+SELECT * FROM books;
+
+--DROP TABLE books purge;
+
+
