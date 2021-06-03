@@ -23,7 +23,7 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 	private JButton searchBtn = new JButton("Search");
 	private JButton addBtn = new JButton("Add");
 
-	//Map 객체로 단어장 구현
+	//Map 객체로 단어장 구현.
 	// <Key, Value> 쌍으로 저장. key는 한글, value는 대응되는 영어단어.
 	Map<String, String> dict = new HashMap<>();
 	private static final String DIC_FILE_NAME = "dict.props";
@@ -186,17 +186,17 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 		try (Connection conn = DriverManager.getConnection(URL, USER, PWD)){
 			String sql = "INSERT INTO dict VALUES(?, ?)"; // (kWord, eWord) 도 가능 ? 에 데이터를 채워주어야 함.
 			// ? 는 place holder이고, 실행준비 시킨후에 실행직전에 값을 설정하고, 실행요청을 보냄.
-			
+
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
 			// ? 자리에 값을 채운 후, 서버에게 실행준비된 SQL 문을 실행하게끔 요청.
 			// ? 자리에 들어갈 컬럼값의 데이터 타입에 따라 적절한 setXXX 메소드를 호출해야함.
-			
+
 
 			pstmt.setString(1, key); // 각 자릿수의 인자에 해당하는 값을 지정.
 			pstmt.setString(2, value);
-			
-			
+
+
 			pstmt.executeUpdate(); // 실행 요청.
 
 		}catch(Exception e) {
