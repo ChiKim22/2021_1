@@ -52,5 +52,5 @@ CREATE table posts (
 
 select * from posts;
 
-drop table posts purge;
+-- drop table posts purge;
 
