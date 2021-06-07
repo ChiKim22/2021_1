@@ -43,3 +43,14 @@ SELECT * FROM books;
 --DROP TABLE books purge;
 
 
+CREATE table posts (
+	userId int,
+	id int PRIMARY KEY,
+	title varchar2(100),
+	body varchar2(500)
+);
+
+select * from posts;
+
+drop table posts purge;
+
