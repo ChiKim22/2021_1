@@ -35,7 +35,7 @@ public class TableViewer extends JFrame implements ActionListener{
 		}
 
 		try {
-			String sql = "SELECT * FROM books ORDER BY book_id desc";
+			String sql = "SELECT * FROM books ORDER BY book_id";
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); // 변경을 하면 반영을 해서 바로 반영.
 			rs = pstmt.executeQuery();
 		}catch(Exception e) {
@@ -118,8 +118,8 @@ public class TableViewer extends JFrame implements ActionListener{
 	public static Connection makeConnection() throws Exception {
 
 		String URL = "jdbc:oracle:thin:@127.0.0.1:1521:xe";
-		String USER = "system";
-		String PWD = "oracle";
+		String USER = "oop";
+		String PWD = "oop";
 
 		//		Connection conn = null;
 
