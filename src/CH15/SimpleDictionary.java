@@ -32,8 +32,8 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 	// DB
 	private String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
 	private String URL = "jdbc:oracle:thin:@127.0.0.1:1521:xe";
-	private String USER = "system";
-	private String PWD = "oracle";
+	private String USER = "oop";
+	private String PWD = "oop";
 
 
 	public SimpleDictionary() {
